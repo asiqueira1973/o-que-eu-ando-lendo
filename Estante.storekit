@@ -1,0 +1,29 @@
+{
+  "identifier" : "ESTANTE-STOREKIT-CONFIG",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "19.90",
+      "familyShareable" : false,
+      "internalID" : "ESTANTE-DESBLOQUEIO",
+      "localizations" : [
+        {
+          "description" : "Desbloqueie registros ilimitados com um pagamento único, sem assinatura.",
+          "displayName" : "Registros ilimitados",
+          "locale" : "pt_BR"
+        }
+      ],
+      "productID" : "estante_desbloqueio_completo",
+      "referenceName" : "Desbloqueio completo (compra única)",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_storeKitErrors" : []
+  },
+  "subscriptionGroups" : [],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

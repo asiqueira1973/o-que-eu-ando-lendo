@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Info.plist do app "O que eu ando lendo" (codinome técnico Estante).
+  Declara nome de exibição, localização pt-BR e as permissões de Câmera e
+  Biblioteca de Fotos usadas ao adicionar a foto da capa (spec seção 20).
+  Sem uso de rede/criptografia não isenta (app 100% offline, spec 0.1/20).
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>O que eu ando lendo</string>
+	<key>CFBundleName</key>
+	<string>Estante</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>pt-BR</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>pt-BR</string>
+	</array>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UILaunchScreen</key>
+	<dict/>
+	<!-- App 100% offline, sem criptografia não isenta (spec 0.1/20). -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<!-- Permissão de câmera: tirar foto da capa na hora (spec 4/8.1/20). -->
+	<key>NSCameraUsageDescription</key>
+	<string>Para adicionar uma foto da capa do livro que você está registrando.</string>
+	<!-- Permissão de biblioteca de fotos: escolher a capa da galeria (spec 4/8.1/20). -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Para adicionar uma foto da capa do livro que você está registrando.</string>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+</dict>
+</plist>

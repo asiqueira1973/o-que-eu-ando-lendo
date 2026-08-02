@@ -1,0 +1,64 @@
+// Modelo de dados — "O que eu ando lendo" (codinome técnico do projeto: Estante)
+// Gerado a partir da seção 7 do spec.md — reflete exatamente as tabelas, campos,
+// tipos, nullability, defaults e constraints descritos ali.
+// Sem relação de chave estrangeira entre as tabelas (independência por design,
+// ver trade-off declarado na seção 7.1 do spec).
+
+Table livros {
+  id uuid [pk, default: `gen_random_uuid()`]
+  titulo text [not null]
+  autor text
+  editora text
+  foto_arquivo text
+  status status_livro [not null, default: 'quero_ler']
+  avaliacao_estrelas integer
+  comentario text
+  indicado_por text
+  data_inicio_leitura date
+  data_conclusao date
+  criado_em timestamp [not null, default: `now()`]
+  atualizado_em timestamp [not null, default: `now()`]
+
+  Note: 'Registro de um livro do usuário — pode estar em "quero ler", "lendo" ou "lido". Exclusão é hard delete (spec seção 7.2).'
+}
+
+// avaliacao_estrelas: quando preenchido, valor entre 1 e 5 (constraint de aplicação — SwiftData
+// não tem check constraint nativo; validado em código, spec seção 7.5)
+// data_conclusao: preenchida automaticamente com a data de hoje ao entrar em status = 'lido'
+// (editável); limpa automaticamente ao sair do status 'lido' (regra de negócio, spec seção 11)
+
+enum status_livro {
+  quero_ler
+  lendo
+  lido
+}
+
+Table metas {
+  id uuid [pk, default: `gen_random_uuid()`]
+  tipo_periodo tipo_periodo_meta [not null]
+  ano integer [not null]
+  numero_periodo integer
+  quantidade_alvo integer [not null]
+  meta_atingida_em timestamp
+  criado_em timestamp [not null, default: `now()`]
+  atualizado_em timestamp [not null, default: `now()`]
+
+  Note: 'Meta de leitura definida pelo usuário para um período (mês, trimestre, semestre ou ano). Progresso calculado em tempo real consultando livros.status=lido e livros.data_conclusao dentro do período — sem FK (spec seção 7.1/11). Exclusão é hard delete (spec seção 7.3).'
+}
+
+// numero_periodo: 1-12 quando tipo_periodo='mensal'; 1-4 quando 'trimestral'; 1-2 quando
+// 'semestral'; nulo quando 'anual' (spec seção 7.3)
+// unique (tipo_periodo, ano, numero_periodo): não pode existir duas metas para o mesmo
+// tipo+período (constraint de aplicação, spec seção 7.3)
+// quantidade_alvo: deve ser maior que zero (constraint de aplicação, spec épico 8.6)
+// meta_atingida_em: não regride uma vez preenchido, mesmo que a contagem recalculada
+// caia depois (regra de negócio, spec seção 11)
+
+enum tipo_periodo_meta {
+  mensal
+  trimestral
+  semestral
+  anual
+}
+
+// Não há Ref entre livros e metas — independência de modelagem por design (spec seção 7.1).
