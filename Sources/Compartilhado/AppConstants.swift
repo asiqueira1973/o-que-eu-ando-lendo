@@ -24,7 +24,7 @@ enum AppConstants {
     /// App ID real ser emitido no App Store Connect (spec 25/27).
     static let appStoreReviewURL = URL(string: "https://apps.apple.com/app/id0000000000?action=write-review")!
 
-    /// URL da política de privacidade (spec 10/20). Reaproveita o documento
-    /// institucional da Dab Lab; confirmar/ajustar antes da submissão (spec 20/27).
-    static let privacyPolicyURL = URL(string: "https://dablab.com.br/privacidade")!
+    /// URL da política de privacidade (spec 10/20) — documento institucional da
+    /// Dab Lab no Notion, compartilhado para os apps.
+    static let privacyPolicyURL = URL(string: "https://app.notion.com/p/POL-TICA-DE-PRIVACIDADE-APLICATIVOS-DA-DAB-LAB-2bd4305f24e180c395cdda41879cf567?source=copy_link")!
 }

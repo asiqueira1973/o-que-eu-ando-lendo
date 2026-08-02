@@ -71,7 +71,8 @@ Toda pura e testável (27 testes em `EstanteTests/`).
 | Meta batida | `GoalEvaluator.swift` | Ao salvar um livro `lido`, decide quais metas foram batidas pela 1ª vez (só `meta_atingida_em == nil`, período contém a data, contagem ≥ alvo). Disparado em `BookFormViewModel.salvar`. |
 | Trial | `TrialGate.swift` | Decide se criar um livro novo precisa passar pelo Paywall (≥ 5 e sem compra). Chamado em `BookFormViewModel.salvar` (só para livro novo). |
 | Foto | `PhotoStorage.swift` | Redimensiona (≤1200px) + comprime (JPEG ~0.7) e grava em `Application Support/Fotos/`; devolve o nome do arquivo. Em falha de disco, salva o livro sem foto com aviso (spec 12). |
-| CSV | `CSVExporter.swift` | Gera o CSV (UTF-8 com BOM, separador `;`, colunas/ordem/nome de arquivo da seção 14). Chamado por `ExportViewModel`. |
+| CSV (exportar) | `CSVExporter.swift` | Gera o CSV (UTF-8 com BOM, separador `;`, colunas/ordem/nome de arquivo da seção 14). Chamado por `ExportViewModel`. |
+| CSV (importar/restaurar) | `Exportar/CSVImporter.swift` + `Exportar/BackupRestore.swift` | Lê um CSV exportado (parser RFC 4180 sobre Unicode.Scalar, para o `\r\n` não virar um único grapheme) e **sobrescreve o banco**: apaga livros + metas + fotos órfãs e recria os livros como `lido` (spec 14). Disparado nas Configurações com confirmação explícita. |
 | Cores/lombadas | `DesignTokens.swift` | Paleta e cor determinística por `id` do livro (`BookColor.color(for:)`). |
 
 ---
@@ -89,7 +90,7 @@ Toda pura e testável (27 testes em `EstanteTests/`).
 | Exportar (`Exportar/ExportView.swift` + `ExportViewModel`) | `livros` | — (só arquivo temporário) |
 | Cartão (`Compartilhado/ShareCardView.swift`) | `livros`, `metas` | — (só imagem temporária) |
 | Paywall (`Compra/PaywallView.swift` + `StoreManager`) | StoreKit | — (entitlement fica no StoreKit, não no banco) |
-| Configurações (`Configuracoes/SettingsView.swift`) | StoreKit | — |
+| Configurações (`Configuracoes/SettingsView.swift`) | StoreKit, `livros`/`metas` (só ao importar backup) | `livros`, `metas` (sobrescrita na importação de CSV) |
 
 ---
 
@@ -99,8 +100,9 @@ Toda pura e testável (27 testes em `EstanteTests/`).
 - **Detalhe (8.2/8.5/8.11):** mostra todos os campos, posição `#N` no ano, duração; Editar reabre o formulário; Excluir pede confirmação e faz hard delete (apaga também a foto); botão do Cartão só para `lido`.
 - **Biblioteca (8.4):** todos os livros com segmentado Todos/Quero ler/Lendo/Lido (default Todos; "Todos" ordena por `atualizado_em` desc). No filtro "Quero ler" mostra `indicado_por` e "Comecei a ler" (muda status para `lendo` sem abrir o formulário). Ícone de exportar na barra abre a tela Exportar; "+" pré-seleciona o status do filtro ativo. Estados vazios por filtro (copy da seção 15). O filtro é um `@Binding` controlado pelo `RootTabView`, para o "Ver tudo" da Home abrir a Biblioteca já em "Lendo".
 - **Metas (8.6/8.7):** cria meta validando duplicata (`tipo`+`ano`+`numero`) e alvo > 0; progresso "X de Y" em tempo real; selo "BATIDA"; celebração com confete e atalho para o cartão.
-- **Home (8.8):** 4 indicadores (contagem "até hoje" de cada período corrente), "lendo agora" (até 2 mais recentes por `atualizado_em`, com link "Ver tudo" → Biblioteca em "Lendo" quando há mais de 2), Top 3 do ano, feed de lidos (desc); estado vazio com a copy da seção 15.
+- **Home (8.8):** 2 indicadores — mês e ano correntes (contagem "até hoje"; trimestre/semestre foram removidos da Home para poluir menos), "lendo agora" (até 2 mais recentes por `atualizado_em`, com link "Ver tudo" → Biblioteca em "Lendo" quando há mais de 2), Top 3 do ano, feed de lidos (desc); estado vazio com a copy da seção 15.
 - **Exportar (8.9):** monta o `ExportScope` e gera o CSV; abre a folha de compartilhamento nativa; período vazio → só cabeçalho.
+- **Importar backup / Configurações (8.9/seção 14):** o seletor de arquivos nativo escolhe um `.csv`; após confirmação explícita, `BackupRestore` sobrescreve o banco (apaga livros + metas + fotos e recria os livros como `lido`). Único ponto do app onde as Configurações escrevem no banco. Também: a política de privacidade abre o documento institucional da Dab Lab no Notion (`AppConstants.privacyPolicyURL`).
 - **Paywall (8.10):** trial de 5; 6º dispara o Paywall; comprar/restaurar completa o salvamento pendente; restaurar também nas Configurações.
 - **Cartão (8.11):** calcula X (posição no período) e Y (alvo da meta do mesmo período, se existir → "X/Y", senão "X"); renderiza 1080×1080 via `ImageRenderer`; escolha de cor de fundo (um layout só); sem escrita no banco.
 

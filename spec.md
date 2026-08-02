@@ -249,7 +249,7 @@ Critérios de aceite:
 Objetivo: dar, na abertura do app, uma visão rápida e bonita do hábito de leitura da pessoa.
 Fluxo: abertura do app → Home com três blocos, nesta ordem: indicadores no topo, Top 3 do ano, feed cronológico de livros lidos.
 Critérios de aceite:
-- Indicadores mostram, lado a lado, a contagem de livros com `status = lido` no mês corrente, no trimestre corrente, no semestre corrente e no ano corrente (todos "a partir do início do período até hoje", seção 11).
+- Indicadores mostram, lado a lado, a contagem de livros com `status = lido` no mês corrente e no ano corrente (ambos "a partir do início do período até hoje", seção 11). Só esses dois, para a Home ficar mais limpa; trimestre e semestre seguem disponíveis como filtros na Exportação e no Cartão.
 - Top 3 mostra até 3 livros com `status = lido` e `avaliacao_estrelas` preenchida no ano corrente, ordenados por estrelas (desc) e, em empate, por data de conclusão mais recente; mostra menos de 3 se não houver livros suficientes elegíveis, e nada (com estado vazio) se não houver nenhum.
 - Feed lista os livros `lido`, ordenados por `data_conclusao` decrescente (mais recente primeiro), mostrando foto/ilustração, título, autor e estrelas.
 - Se houver algum livro com `status = lendo`, a seção "Lendo agora" mostra até 2 deles (os mais recentes por `atualizado_em`); havendo mais de 2, aparece um link "Ver tudo" que abre a Biblioteca (épico 8.4) já com o filtro "Lendo" ativo.
@@ -263,6 +263,12 @@ Critérios de aceite:
 - Arquivo CSV segue exatamente o formato da seção 14 (colunas, encoding, separador, nome do arquivo).
 - Período sem nenhum livro lido gera um CSV só com o cabeçalho, não um erro.
 - Depois de gerado, abre a folha de compartilhamento nativa do iOS — o app nunca decide sozinho para onde o arquivo vai.
+
+**Importar backup (restaurar):** nas Configurações há também "Importar backup (CSV)", para o caso de a pessoa ter exportado, reinstalado o app e querer restaurar. Critérios de aceite:
+- Abre o seletor de arquivos nativo do iOS para escolher um `.csv` no formato exportado (seção 14).
+- A importação **sobrescreve todo o banco**: apaga os livros e as metas atuais (e as fotos órfãs) e recria os livros a partir do arquivo, todos com `status = lido` (a exportação só contém lidos; autor, estrelas, comentário, indicado por e data de conclusão são restaurados; editora, foto, data de início e metas não constam do CSV e não são restaurados).
+- Por ser destrutiva e irreversível, a importação pede confirmação explícita antes de aplicar, dizendo que substitui tudo.
+- Arquivo vazio (só cabeçalho) ou inválido não quebra o app — importa zero livros.
 
 ### 8.10 Paywall e compra única
 Objetivo: permitir uso gratuito até 5 livros registrados, com desbloqueio ilimitado via compra única.
@@ -323,7 +329,7 @@ Critérios de aceite:
 
 | Tela | Acesso | Mostra | Lê | Escreve |
 |---|---|---|---|---|
-| Início (Home) | Abertura do app | Indicadores de período, "lendo agora" (com "Ver tudo"), Top 3 do ano, feed de lidos | `livros` | — |
+| Início (Home) | Abertura do app | Indicadores de mês e ano, "lendo agora" (com "Ver tudo"), Top 3 do ano, feed de lidos | `livros` | — |
 | Cadastrar/Editar livro | "+" na Home, na Biblioteca, ou tocando num livro existente | Formulário completo (título, autor, editora, foto, status, estrelas, comentário, indicado por, datas) | `livros` | `livros` |
 | Detalhe do livro | Tocar num livro em qualquer lista | Todos os campos do livro, botão excluir, botão Cartão (épico 8.11) | `livros` | `livros` (edição/exclusão) |
 | Biblioteca | Aba dedicada, ou "Ver tudo" a partir da Home | Todos os livros, com filtro por status: Todos / Quero ler / Lendo / Lido (épico 8.4); botão de exportar na barra de ferramentas | `livros` | `livros` (atalho "Comecei a ler") |
@@ -331,7 +337,7 @@ Critérios de aceite:
 | Exportar | Botão na Biblioteca, ou atalho nas Configurações | Seleção de período, botão exportar | `livros` | Nenhuma tabela — só gera arquivo temporário e abre a folha de compartilhamento |
 | Cartão compartilhável | Detalhe de um livro `lido`, ou atalho na tela de meta batida | Seleção de tipo de período, preview do cartão (foto/ilustração, título, autor, posição "X" ou "X/Y") | `livros` (para calcular a posição), `metas` (para saber se existe meta do período) | Nenhuma tabela — só gera imagem temporária e abre a folha de compartilhamento |
 | Paywall | Ao tentar cadastrar o 6º livro sem compra, ou manualmente pelas Configurações | Preço, botão comprar, botão restaurar compra | StoreKit (`Product`) | `livros` (preferência local de compra, ver seção 24 sobre onde esse flag mora) |
-| Configurações | Aba/botão dedicado | Sobre o app, avaliar na App Store, política de privacidade, botão restaurar compra, atalho para Exportar | — | — |
+| Configurações | Aba/botão dedicado | Sobre o app, avaliar na App Store, política de privacidade, botão restaurar compra, atalho para Exportar e Importar backup (CSV) | — | `livros`, `metas` (só a importação sobrescreve o banco — épico 8.9/seção 14) |
 
 ---
 
@@ -344,7 +350,7 @@ Critérios de aceite:
 | Cálculo de trimestre | Qualquer contagem/filtro trimestral | Q1 = jan–mar, Q2 = abr–jun, Q3 = jul–set, Q4 = out–dez | App |
 | Cálculo de semestre | Qualquer contagem/filtro semestral | S1 = jan–jun, S2 = jul–dez | App |
 | Fuso horário dos períodos | Qualquer cálculo de mês/trimestre/semestre/ano | Usa o calendário e fuso horário atuais do aparelho (`Calendar.current`), não um fuso fixo | App |
-| Indicadores da Home | Contagem de "livros lidos no mês/trimestre/semestre/ano" | Conta livros com `status = lido` e `data_conclusao` do início do período corrente até hoje (não é janela móvel de X dias) | App |
+| Indicadores da Home | Contagem de "livros lidos no mês e no ano" | Conta livros com `status = lido` e `data_conclusao` do início do período corrente até hoje (não é janela móvel de X dias). A Home mostra só mês e ano (trimestre/semestre saíram para poluir menos) | App |
 | Top 3 do ano | Cálculo do bloco "Top 3" na Home | Entre livros `status = lido` **e** `avaliacao_estrelas` preenchida, com `data_conclusao` no ano corrente; ordena por estrelas desc, empate por `data_conclusao` desc; mostra menos de 3 se não houver suficientes | App |
 | Avaliação sem limite obrigatório | Livro marcado como `lido` | `avaliacao_estrelas` continua opcional mesmo assim — não é obrigatório avaliar para marcar como lido | App |
 | Meta batida (primeira vez) | Uma meta ativa com `meta_atingida_em` nulo tem sua contagem atingindo ou ultrapassando `quantidade_alvo` **no momento em que um livro é salvo como `lido`** | `meta_atingida_em` é preenchido com a data/hora atual e a mensagem de parabéns (épico 8.7) é exibida | App |
@@ -414,7 +420,7 @@ O MVP exporta em **CSV**, acessível pela tela "Exportar" (épico 8.9). O cartã
 - **Separador:** ponto e vírgula (`;`) — configuração regional do Excel em português do Brasil usa vírgula como separador decimal, então `;` evita que o arquivo abra com todas as colunas numa célula só.
 - Período sem nenhum livro lido gera um CSV só com a linha de cabeçalho (não um erro).
 
-Não há importação de dados neste produto — fora de escopo (não é um objetivo migrar de planilha ou de outro app).
+**Importação (restaurar backup):** o app importa de volta um CSV que ele mesmo exportou, pelas Configurações → "Importar backup (CSV)" (épico 8.9). É uma restauração de backup, não uma migração de outro app: **sobrescreve todo o banco** (apaga livros e metas atuais e recria os livros do arquivo, todos com `status = lido`, já que a exportação só contém lidos). Só reimporta os campos presentes no CSV (título, autor, estrelas, comentário, indicado por, data de conclusão); editora, foto, data de início e metas não constam do arquivo. Pede confirmação explícita por ser destrutiva. O parsing respeita aspas, o separador `;` e o BOM da seção acima.
 
 ---
 

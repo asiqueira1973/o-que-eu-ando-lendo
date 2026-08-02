@@ -68,12 +68,11 @@ struct HomeView: View {
         .padding(.top, 8)
     }
 
+    // Indicadores: só mês e ano correntes, para a Home ficar mais limpa (spec 8.8).
     private var indicadores: some View {
         let i = vm.indicadores
-        return HStack(spacing: 10) {
+        return HStack(spacing: 12) {
             statPill(i.mes, "Este mês", bg: Palette.coral, fg: .white)
-            statPill(i.trimestre, "Trimestre", bg: Palette.mustard, fg: Palette.mustardInk)
-            statPill(i.semestre, "Semestre", bg: Palette.mint, fg: Palette.mintInk)
             statPill(i.ano, "Este ano", bg: Palette.sky, fg: Palette.skyInk)
         }
     }
