@@ -6,9 +6,11 @@
 // (spec 8.1) de qualquer lugar.
 
 import SwiftUI
+import SwiftData
 
 struct RootTabView: View {
     @EnvironmentObject private var store: StoreManager
+    @Environment(\.modelContext) private var modelContext
     @State private var aba: Aba = .estante
     @State private var adicionar = false
     // Filtro atual da Biblioteca — controlado aqui para o "Ver tudo" da Home poder
@@ -18,9 +20,15 @@ struct RootTabView: View {
     enum Aba { case estante, biblioteca, metas, config }
 
     #if DEBUG
-    // Abre o Paywall direto na inicialização quando ESTANTE_SHOW_PAYWALL=1 — usado
-    // só para capturar a screenshot de review do IAP (App Store Connect). Só DEBUG.
-    @State private var debugPaywall = ProcessInfo.processInfo.environment["ESTANTE_SHOW_PAYWALL"] == "1"
+    // Abre uma tela direto na inicialização para capturar screenshots (Paywall do
+    // IAP, ou o card de meta batida). Só DEBUG, via env ESTANTE_SHOW_*.
+    private enum DebugScreen: Identifiable { case paywall, meta; var id: Int { hashValue } }
+    @State private var debugScreen: DebugScreen? = {
+        let e = ProcessInfo.processInfo.environment
+        if e["ESTANTE_SHOW_PAYWALL"] == "1" { return .paywall }
+        if e["ESTANTE_SHOW_META"] == "1" { return .meta }
+        return nil
+    }()
     #endif
 
     var body: some View {
@@ -33,8 +41,18 @@ struct RootTabView: View {
             BookFormView().environmentObject(store)
         }
         #if DEBUG
-        .fullScreenCover(isPresented: $debugPaywall) {
-            PaywallView().environmentObject(store)
+        .fullScreenCover(item: $debugScreen) { tela in
+            switch tela {
+            case .paywall:
+                PaywallView().environmentObject(store)
+            case .meta:
+                let livros = (try? modelContext.fetch(FetchDescriptor<Livro>())) ?? []
+                let metas = (try? modelContext.fetch(FetchDescriptor<Meta>())) ?? []
+                if let l = livros.first(where: { $0.status == .lido }),
+                   let m = metas.first(where: { $0.tipo_periodo == .mensal }) ?? metas.first {
+                    ShareCardView(livro: l, mode: .meta(m)).environmentObject(store)
+                }
+            }
         }
         #endif
     }

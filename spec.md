@@ -241,7 +241,7 @@ Fluxo: ao salvar um livro como `lido` (épico 8.1 ou 8.2) cuja `data_conclusao` 
 Critérios de aceite:
 - A mensagem só aparece uma vez por meta (na primeira vez que ela é atingida) — reaberturas do app ou novos livros na mesma meta não repetem a mensagem.
 - A mensagem mostra o tipo de meta, o período e a quantidade atingida (ex.: "Você bateu sua meta de agosto: 8 livros lidos! 🎉").
-- A tela de parabéns tem um atalho direto para o Cartão compartilhável (épico 8.11) já pré-preenchido com esse livro e esse período — não é obrigatório passar por essa tela para gerar o cartão, é só um atalho conveniente.
+- A tela de parabéns tem um atalho direto para o Cartão compartilhável (épico 8.11) na variante **meta batida** (celebração "X/Y", já pré-preenchida com essa meta) — não é obrigatório passar por essa tela para gerar o cartão, é só um atalho conveniente.
 - Se mais de uma meta for atingida pelo mesmo livro salvo (ex.: mensal e anual ao mesmo tempo), as mensagens aparecem em sequência, uma por meta.
 - Editar retroativamente um livro para uma data de um período passado, cuja meta já estava com `meta_atingida_em` preenchido antes dessa edição, **não** dispara a mensagem de novo — só atualiza o contador silenciosamente (regra da seção 11).
 
@@ -284,9 +284,13 @@ Critérios de aceite:
 
 ### 8.11 Gerar e compartilhar o cartão de leitura
 Objetivo: gerar uma imagem colorida, pronta para postar em redes sociais, mostrando em que posição aquele livro está dentro de um período — o equivalente digital do post "8/2016". **Não depende de nenhuma meta criada** — funciona para qualquer usuário, com ou sem meta ativa.
-Fluxo: a partir do Detalhe de um livro `lido` (épico 8.2) ou do atalho na mensagem de parabéns (épico 8.7) → botão "Cartão" → escolher o tipo de período (mês, trimestre, semestre ou ano) → app calcula a posição do livro dentro do período escolhido e monta o cartão → botão "Compartilhar" → folha de compartilhamento nativa do iOS.
+**Formato e estilo (atualizado):** os cartões saem no tamanho de **stories, 9:16 (1080×1920)**, não mais quadrado, no espírito "Wrapped" — fundo colorido da paleta do app, formas divertidas e tipografia grande arredondada (seção 16). São **três variantes**, na mesma família visual:
+1. **Livro lido** — posição do livro no período ("Nº X" ou "X/Y"), a partir do Detalhe.
+2. **Meta batida** — celebração da meta ("X/Y", "Você bateu sua meta!", confete), a partir do atalho da mensagem de parabéns (épico 8.7).
+3. **Compartilhar com um amigo** *(novo)* — cartão de recomendação de um livro `lido` (capa/lombada, título, autor, estrelas, "recomendo pra você"), a partir do Detalhe. Usa a foto do livro quando há uma; senão, a lombada colorida desenhada (seção 16).
+Fluxo (livro lido): a partir do Detalhe de um livro `lido` (épico 8.2) → botão "Card de compartilhar" → escolher o tipo de período (mês, trimestre, semestre ou ano) → app calcula a posição do livro dentro do período escolhido e monta o cartão → escolher a cor de fundo (paleta) → "Compartilhar" → folha de compartilhamento nativa do iOS.
 Critérios de aceite:
-- O botão "Cartão" aparece em qualquer livro com `status = lido`, independentemente de existir alguma meta cadastrada.
+- O botão "Card de compartilhar" e o "Compartilhar com um amigo" aparecem em qualquer livro com `status = lido`, independentemente de existir alguma meta cadastrada.
 - Ao escolher, por exemplo, "ano", o app calcula X = quantas vezes esse livro entra na contagem de livros lidos naquele ano (ver regra de posição, seção 11) e mostra "livro nº X de {ano}".
 - Se existir uma meta ativa do mesmo tipo de período e mesmo ano/período para esse livro, o cartão mostra "X/Y" (Y = `quantidade_alvo` daquela meta) em vez de só "X".
 - Se não existir meta para aquele tipo de período, o cartão mostra só "X", sem barra de fração — o card não fica com aparência de "incompleto" por não ter meta (ver seção 16).
@@ -331,7 +335,7 @@ Critérios de aceite:
 |---|---|---|---|---|
 | Início (Home) | Abertura do app | Indicadores de mês e ano, "lendo agora" (com "Ver tudo"), Top 3 do ano, feed de lidos | `livros` | — |
 | Cadastrar/Editar livro | "+" na Home, na Biblioteca, ou tocando num livro existente | Formulário completo (título, autor, editora, foto, status, estrelas, comentário, indicado por, datas) | `livros` | `livros` |
-| Detalhe do livro | Tocar num livro em qualquer lista | Todos os campos do livro, botão excluir, botão Cartão (épico 8.11) | `livros` | `livros` (edição/exclusão) |
+| Detalhe do livro | Tocar num livro em qualquer lista | Todos os campos do livro, botão excluir, "Card de compartilhar" e "Compartilhar com um amigo" (épico 8.11) | `livros` | `livros` (edição/exclusão) |
 | Biblioteca | Aba dedicada, ou "Ver tudo" a partir da Home | Todos os livros, com filtro por status: Todos / Quero ler / Lendo / Lido (épico 8.4); botão de exportar na barra de ferramentas | `livros` | `livros` (atalho "Comecei a ler") |
 | Metas | Aba/seção dedicada | Lista de metas ativas com progresso, botão para criar nova | `metas`, `livros` (para calcular progresso) | `metas` |
 | Exportar | Botão na Biblioteca, ou atalho nas Configurações | Seleção de período, botão exportar | `livros` | Nenhuma tabela — só gera arquivo temporário e abre a folha de compartilhamento |
@@ -441,9 +445,13 @@ Tom: caloroso, direto, em português do Brasil natural, com leveza (emoji pontua
 | Botão de compra | "Desbloquear por R$ 20" |
 | Botão de restaurar compra | "Já comprei — restaurar" |
 | Campo de comentário (placeholder) | "O que você achou desse livro?" |
-| Botão de gerar cartão | "Cartão" |
-| Texto do cartão, com meta | "Livro {X} de {Y} da minha meta de {período}" |
-| Texto do cartão, sem meta | "Livro nº {X} que li {no mês/trimestre/semestre/ano}" |
+| Botão do cartão (livro lido) | "Card de compartilhar" |
+| Botão do cartão (amigo) | "Compartilhar com um amigo" |
+| Cartão livro lido — herói | "Nº {X}" (com meta: "Nº {X}/{Y}") |
+| Cartão livro lido — legenda, sem meta | "livro que li {em agosto / no 3º trimestre / este ano}" |
+| Cartão livro lido — legenda, com meta | "livros da minha meta {período}" |
+| Cartão meta batida — título | "Você bateu sua meta!" (kicker "meta {de agosto} batida", herói "{X}/{Y}") |
+| Cartão amigo — kicker/selo | "Acabei de ler" · "recomendo pra você" · rodapé "achei que ia gostar · da minha estante" |
 | Botão de compartilhar o cartão | "Compartilhar" |
 
 Estes são textos finais candidatos, não placeholder — ajustáveis em revisão de copy antes do lançamento, mas o agente de código deve usá-los como estão, não inventar substitutos.
@@ -468,7 +476,7 @@ Implement: `Estante Screens.dc.html`
 Como os arquivos já foram colocados dentro da pasta do projeto que vai ser usada no Claude Code, a implementação **não depende de rodar essa importação de novo** — o agente de código pode simplesmente ler os arquivos locais em `book-tracker-design-system/` diretamente. O comando acima fica registrado aqui só para o caso de precisar reimportar uma versão atualizada do design mais tarde.
 
 - **Nome confirmado:** "O que eu ando lendo" (nome de exibição — App Store e dentro do app). Codinome técnico do projeto/repositório: "Estante" (seção 24).
-- **Cartão compartilhável (épico 8.11):** formato quadrado (1:1, padrão para post de feed do Instagram), fundo colorido vindo da mesma paleta viva do app, com a foto/ilustração do livro em destaque, título e autor abaixo, e o número "X" ou a fração "X/Y" em tipografia grande, como elemento central da composição — é o "post pronto", pensado para não precisar de nenhuma edição externa antes de compartilhar. Quando não há meta (só "X"), o layout usa uma copy que celebra o número sozinho (seção 15), sem parecer que falta algo.
+- **Cartões compartilháveis (épico 8.11):** formato **stories 9:16 (1080×1920)**, estilo "Wrapped" — fundo de cor chapada da paleta viva do app, formas decorativas divertidas (círculos, confete), tipografia grande arredondada e ícones em SVG (sem emoji). Três variantes na mesma família: **livro lido** (número "X"/"X/Y" como herói + capa/lombada + título/autor/estrelas), **meta batida** (fundo escuro com confete, "X/Y" gigante e "Você bateu sua meta!") e **compartilhar com um amigo** (capa/lombada em destaque + "Acabei de ler" + estrelas + selo "recomendo pra você"). A foto do livro é usada quando existe; senão, a lombada colorida desenhada (com cor de contraste ao fundo). O usuário escolhe a cor de fundo na paleta. Cada card é o "post pronto", sem edição externa. Quando não há meta (só "X"), a copy celebra o número sozinho (seção 15), sem parecer que falta algo.
 - **Paleta:** múltiplas cores vivas e alegres (não uma única cor de marca dominante) — proposta inicial de 6 a 8 tons vibrantes (ex.: coral, amarelo-mostarda, verde-menta, azul-céu, roxo-lavanda, rosa-chiclete), usados sobretudo nas "lombadas" de livro ilustradas e em badges de status/meta batida. Fundo neutro claro (quase branco ou levemente creme) para não competir com as cores dos livros. Modo escuro: fundo neutro escuro, mesma paleta viva nos acentos.
 - **Ilustração de livro sem foto:** quando `foto_arquivo` é nulo, a UI mostra um cartão colorido estilo "lombada de livro" com a inicial do título, numa cor escolhida de forma determinística a partir do `id` do livro (hash simples) — assim a cor de um livro específico é sempre a mesma entre sessões, e o feed/lista fica visualmente variado mesmo sem nenhuma foto cadastrada. Isso atende diretamente ao pedido de "ícones coloridos de livros".
 - **Base:** Apple Human Interface Guidelines, SF Symbols para ícones de sistema (configurações, exportar, etc.), tipografia San Francisco padrão no chrome do app.
@@ -644,6 +652,7 @@ O agente de código deve **perguntar em vez de assumir** ao esbarrar em qualquer
 ## 28. Roadmap: próximas releases
 
 **v1.1**
+- Contador de livros na tela Biblioteca (épico 8.4): mostrar, de forma discreta, o total de livros conforme o filtro selecionado (Todos / Quero ler / Lendo / Lido) — o número acompanha o segmento ativo. Pedido do usuário para uma próxima versão.
 - Sincronização entre aparelhos do mesmo usuário via iCloud/CloudKit (`ModelContainer` com `cloudKitDatabase: .automatic`) — adiada do MVP por decisão explícita do usuário (seção 3), mas tecnicamente simples de ligar depois, já que o modelo de dados (seção 7) foi desenhado sem dependências que impeçam isso.
 - Layout dedicado para iPad (aproveitando mais espaço horizontal no feed e nas Metas).
 - Mais de um layout/template de cartão compartilhável (o MVP entrega um layout só, seção 16) — variações de composição para quem quer postar com mais frequência sem repetir sempre o mesmo visual.

@@ -85,7 +85,7 @@ struct GoalReachedView: View {
             .padding(.bottom, 40)
         }
         .sheet(isPresented: $mostrarCartao, onDismiss: { dismiss(); onFinish() }) {
-            ShareCardView(livro: livro, periodoInicial: meta.tipo_periodo)
+            ShareCardView(livro: livro, mode: .meta(meta))
         }
     }
 

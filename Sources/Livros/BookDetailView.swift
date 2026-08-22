@@ -22,7 +22,7 @@ struct BookDetailView: View {
     // Uma única apresentação de sheet por vez — SwiftUI só honra um `.sheet` por
     // view, então edição e cartão compartilham este enum (spec 8.2/8.11).
     private enum DetailSheet: Identifiable {
-        case editar, cartao
+        case editar, cartao, amigo
         var id: Int { hashValue }
     }
 
@@ -44,6 +44,7 @@ struct BookDetailView: View {
                     datasRow
                     if livro.status == .lido {
                         cartaoCTA
+                        amigoCTA
                     }
                 }
                 .padding(.horizontal, 20)
@@ -66,6 +67,7 @@ struct BookDetailView: View {
             switch qual {
             case .editar: BookFormView(editing: livro).environmentObject(store)
             case .cartao: ShareCardView(livro: livro)
+            case .amigo: ShareCardView(livro: livro, mode: .amigo)
             }
         }
         .confirmationDialog("Excluir este livro?", isPresented: $confirmarExclusao, titleVisibility: .visible) {
@@ -170,6 +172,30 @@ struct BookDetailView: View {
             .padding(18)
             .background(Palette.ink)
             .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        }
+    }
+
+    // Novo: compartilhar o livro com um amigo, no mesmo formato stories (spec 16).
+    private var amigoCTA: some View {
+        Button { sheet = .amigo } label: {
+            HStack(spacing: 14) {
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(Palette.mint)
+                    .frame(width: 44, height: 44)
+                    .overlay(Image(systemName: "heart.fill").foregroundStyle(Palette.mintInk))
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Compartilhar com um amigo")
+                        .font(.system(size: 16.5, weight: .heavy))
+                        .foregroundStyle(Palette.textPrimary)
+                    Text("Um card de recomendação pra mandar pra alguém")
+                        .font(.system(size: 12.5))
+                        .foregroundStyle(Palette.textSecondary)
+                }
+                Spacer()
+                Image(systemName: "chevron.right").foregroundStyle(Palette.textMuted)
+            }
+            .padding(18)
+            .estanteCard(cornerRadius: 22)
         }
     }
 
