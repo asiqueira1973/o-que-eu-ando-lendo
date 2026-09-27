@@ -27,7 +27,7 @@ struct PaywallView: View {
 
                 Image(systemName: "books.vertical.fill")
                     .font(.system(size: 54, weight: .bold))
-                    .foregroundStyle(Palette.coral)
+                    .foregroundStyle(Palette.accent)
 
                 Text("Continue registrando sem limites")
                     .font(.system(size: 26, weight: .heavy))
@@ -51,7 +51,7 @@ struct PaywallView: View {
                             .foregroundStyle(.white)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
-                            .background(Palette.coral)
+                            .background(Palette.accent)
                             .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
                     }
                     .disabled(store.processando)

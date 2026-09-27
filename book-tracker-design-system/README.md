@@ -1,5 +1,13 @@
 # CODING AGENTS: READ THIS FIRST
 
+> **Revisão de cores — 27/09/2026.** As CORES deste protótipo (fundo creme, textos
+> marrons, coral como destaque, blocos e metas coloridos, lombadas vivas) estão
+> **desatualizadas**. O app passou a uma paleta neutra padrão iOS: fundo `#F2F2F7`,
+> cards brancos, azul `#007AFF` como única cor de destaque e lombadas em pastel.
+> A fonte de verdade de cor é `Sources/Compartilhado/DesignTokens.swift` e a nota
+> "Revisão de cores" na seção 16 do `spec.md`. Use este protótipo só para layout,
+> espaçamento, tipografia e composição — nunca para cor.
+
 This is a **handoff bundle** from Claude Design (claude.ai/design).
 
 A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.

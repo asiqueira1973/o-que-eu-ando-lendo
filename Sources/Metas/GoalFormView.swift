@@ -33,10 +33,10 @@ struct GoalFormView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancelar") { dismiss() }.foregroundStyle(Palette.coral)
+                    Button("Cancelar") { dismiss() }.foregroundStyle(Palette.accent)
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Salvar") { salvar() }.fontWeight(.bold).foregroundStyle(Palette.coral)
+                    Button("Salvar") { salvar() }.fontWeight(.bold).foregroundStyle(Palette.accent)
                 }
             }
             .alert("Não deu para salvar", isPresented: Binding(
@@ -59,7 +59,7 @@ struct GoalFormView: View {
                         .foregroundStyle(sel ? .white : Palette.textSecondary)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 9)
-                        .background(sel ? Palette.coral : Color.clear)
+                        .background(sel ? Palette.accent : Color.clear)
                         .clipShape(RoundedRectangle(cornerRadius: 11, style: .continuous))
                         .onTapGesture { tipo = t; ajustarNumero() }
                 }

@@ -49,7 +49,7 @@ struct SettingsView: View {
                 Section("Compra") {
                     if store.compraDesbloqueada {
                         linha("Registros ilimitados desbloqueados ✓", systemImage: "checkmark.seal.fill")
-                            .foregroundStyle(Palette.mint)
+                            .foregroundStyle(Palette.accent)
                     } else {
                         Button {
                             Task { await store.restaurar() }

@@ -47,7 +47,7 @@ struct GoalsView: View {
             Button { novaMeta = true } label: {
                 Image(systemName: "plus")
                     .font(.system(size: 20, weight: .semibold)).foregroundStyle(.white)
-                    .frame(width: 38, height: 38).background(Palette.coral).clipShape(Circle())
+                    .frame(width: 38, height: 38).background(Palette.accent).clipShape(Circle())
             }
         }
     }
@@ -62,29 +62,30 @@ struct GoalsView: View {
             HStack {
                 Text(rotuloPeriodo(meta).uppercased())
                     .font(.system(size: 12, weight: .heavy)).tracking(1)
-                    .foregroundStyle(.white.opacity(0.85))
+                    .foregroundStyle(Palette.textMuted)
                 Spacer()
                 if batida {
                     Text("BATIDA ✦")
                         .font(.system(size: 12, weight: .heavy))
                         .foregroundStyle(cor)
                         .padding(.horizontal, 10).padding(.vertical, 4)
-                        .background(Palette.ink).clipShape(RoundedRectangle(cornerRadius: 10))
+                        .background(cor.opacity(0.12)).clipShape(RoundedRectangle(cornerRadius: 10))
                 } else {
                     Text("\(progresso) / \(meta.quantidade_alvo)")
-                        .font(.system(size: 13, weight: .bold)).foregroundStyle(.white.opacity(0.85))
+                        .font(.system(size: 13, weight: .bold)).foregroundStyle(Palette.textSecondary)
                 }
             }
             Text("\(progresso) de \(meta.quantidade_alvo) livros")
-                .font(.system(size: 30, weight: .heavy)).foregroundStyle(.white)
-            ProgressBar(fraction: fracao)
+                .font(.system(size: 30, weight: .heavy)).foregroundStyle(Palette.textPrimary)
+            ProgressBar(fraction: fracao, cor: cor)
                 .frame(height: 10)
                 .padding(.top, 6)
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(cor)
-        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        // Revisão 27/09/2026: card branco com só a barra no azul de destaque, em vez
+        // do card inteiro colorido — mais discreto, padrão iOS.
+        .estanteCard(cornerRadius: 24)
         .contextMenu {
             Button(role: .destructive) { excluir(meta) } label: { Label("Excluir meta", systemImage: "trash") }
         }
@@ -113,10 +114,8 @@ struct GoalsView: View {
 
     private func cor(_ tipo: tipo_periodo_meta) -> Color {
         switch tipo {
-        case .mensal: return Palette.mustard
-        case .trimestral: return Palette.sky
-        case .semestral: return Palette.mint
-        case .anual: return Palette.coral
+        // Revisão 27/09/2026: todas as metas no azul de destaque, sem cor por período.
+        case .mensal, .trimestral, .semestral, .anual: return Palette.accent
         }
     }
 
@@ -148,11 +147,12 @@ struct GoalsView: View {
 /// Barra de progresso branca sobre o card colorido da meta (spec 8.6/16).
 private struct ProgressBar: View {
     let fraction: Double
+    let cor: Color
     var body: some View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 6).fill(Color.black.opacity(0.18))
-                RoundedRectangle(cornerRadius: 6).fill(Color.white)
+                RoundedRectangle(cornerRadius: 6).fill(Palette.segmentTrack)
+                RoundedRectangle(cornerRadius: 6).fill(cor)
                     .frame(width: geo.size.width * fraction)
             }
         }

@@ -136,7 +136,7 @@ struct ShareStoryCard: View {
                     Text(chip).font(.system(size: p(15), weight: .bold))
                 }
                 .padding(.horizontal, p(20)).padding(.vertical, p(12))
-                .background(Palette.ink).foregroundStyle(Color(hex: 0xFDF6EC))
+                .background(Palette.ink).foregroundStyle(Color.white)
                 .clipShape(Capsule())
                 .padding(.top, p(4))
             }

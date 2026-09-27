@@ -28,15 +28,15 @@ struct ShareCardView: View {
 
     // Paleta de fundo dos cards + cor de texto que contrasta (spec 16).
     private struct Accent { let bg: Color; let on: Color }
-    private static let cream = Color(hex: 0xFDF6EC)
+    private static let onAccent = Color.white
     private static let accents: [Accent] = [
-        Accent(bg: Palette.coral, on: cream),
+        Accent(bg: Palette.coral, on: onAccent),
         Accent(bg: Palette.mustard, on: Palette.mustardInk),
         Accent(bg: Palette.mint, on: Palette.mintInk),
         Accent(bg: Palette.sky, on: Palette.skyInk),
-        Accent(bg: Palette.lavender, on: cream),
+        Accent(bg: Palette.lavender, on: onAccent),
         Accent(bg: Palette.pink, on: Palette.ink),
-        Accent(bg: Palette.ink, on: cream)
+        Accent(bg: Palette.ink, on: onAccent)
     ]
     private static let inkIndex = 6
 
@@ -99,7 +99,7 @@ struct ShareCardView: View {
 
     private var header: some View {
         HStack {
-            Button("Fechar") { dismiss() }.foregroundStyle(Palette.coral)
+            Button("Fechar") { dismiss() }.foregroundStyle(Palette.accent)
             Spacer()
             Text(tituloTela).font(.system(size: 17, weight: .heavy)).foregroundStyle(Palette.textPrimary)
             Spacer()

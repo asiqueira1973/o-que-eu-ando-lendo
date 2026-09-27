@@ -38,7 +38,7 @@ struct ExportView: View {
                         Text("Exportar CSV")
                             .font(.system(size: 17, weight: .heavy)).foregroundStyle(.white)
                             .frame(maxWidth: .infinity).padding(.vertical, 16)
-                            .background(Palette.coral)
+                            .background(Palette.accent)
                             .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
                     }
                     Text("Gera um arquivo CSV com os livros lidos no período (abre no Excel/Numbers).")
@@ -51,7 +51,7 @@ struct ExportView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Fechar") { dismiss() }.foregroundStyle(Palette.coral)
+                    Button("Fechar") { dismiss() }.foregroundStyle(Palette.accent)
                 }
             }
             .sheet(item: Binding(

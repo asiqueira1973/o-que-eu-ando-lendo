@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// A "lombada" ilustrada de um livro sem foto (spec 16): retângulo colorido, faixa
-/// escura vertical à esquerda e a inicial do título em branco.
+/// escura vertical à esquerda e a inicial do título no tom escuro do pastel.
 struct BookSpineView: View {
     let title: String
     let id: UUID
@@ -28,14 +28,14 @@ struct BookSpineView: View {
                 .fill(color)
             // Faixa escura da "lombada" (spec 16).
             RoundedRectangle(cornerRadius: 2, style: .continuous)
-                .fill(Color.black.opacity(0.16))
+                .fill(BookColor.ink(for: id).opacity(0.18))
                 .frame(width: max(3, width * 0.07))
                 .padding(.vertical, height * 0.09)
                 .padding(.leading, width * 0.11)
             // Inicial do título (spec 16).
             Text(initial)
                 .font(.system(size: height * 0.42, weight: .heavy))
-                .foregroundStyle(.white)
+                .foregroundStyle(BookColor.ink(for: id))
                 .frame(maxWidth: .infinity)
                 .padding(.leading, width * 0.14)
         }

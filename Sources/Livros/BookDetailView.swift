@@ -55,11 +55,11 @@ struct BookDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button("Editar") { sheet = .editar }.foregroundStyle(Palette.coral)
+                Button("Editar") { sheet = .editar }.foregroundStyle(Palette.accent)
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button(role: .destructive) { confirmarExclusao = true } label: {
-                    Image(systemName: "trash").foregroundStyle(Palette.coral)
+                    Image(systemName: "trash").foregroundStyle(Palette.accent)
                 }
             }
         }
@@ -155,9 +155,9 @@ struct BookDetailView: View {
         Button { sheet = .cartao } label: {
             HStack(spacing: 14) {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Palette.mustard)
+                    .fill(Palette.accent)
                     .frame(width: 44, height: 44)
-                    .overlay(Image(systemName: "sparkles").foregroundStyle(Palette.mustardInk))
+                    .overlay(Image(systemName: "sparkles").foregroundStyle(.white))
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Card de compartilhar")
                         .font(.system(size: 16.5, weight: .heavy))
@@ -180,9 +180,9 @@ struct BookDetailView: View {
         Button { sheet = .amigo } label: {
             HStack(spacing: 14) {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Palette.mint)
+                    .fill(Palette.accent.opacity(0.12))
                     .frame(width: 44, height: 44)
-                    .overlay(Image(systemName: "heart.fill").foregroundStyle(Palette.mintInk))
+                    .overlay(Image(systemName: "heart.fill").foregroundStyle(Palette.accent))
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Compartilhar com um amigo")
                         .font(.system(size: 16.5, weight: .heavy))
@@ -210,9 +210,8 @@ struct BookDetailView: View {
 
     private var corStatus: Color {
         switch livro.status {
-        case .quero_ler: return Palette.lavender
-        case .lendo: return Palette.sky
-        case .lido: return Palette.mint
+        // Revisão 27/09/2026: status numa cor só (destaque azul), sem arco-íris.
+        case .quero_ler, .lendo, .lido: return Palette.accent
         }
     }
 

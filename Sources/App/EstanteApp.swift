@@ -27,7 +27,7 @@ struct EstanteApp: App {
         WindowGroup {
             RootTabView()
                 .environmentObject(store)
-                .tint(Palette.coral)
+                .tint(Palette.accent)
                 // Entitlement é lido de forma preguiçosa (na 1ª vez que o Paywall
                 // ou as Configurações aparecem) para não disparar prompt de conta
                 // Apple na abertura — o trial já assume "não comprado" por padrão

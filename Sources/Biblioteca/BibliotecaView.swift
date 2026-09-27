@@ -101,14 +101,14 @@ struct BibliotecaView: View {
                     .foregroundStyle(Palette.textSecondary)
                     .frame(width: 38, height: 38)
                     .background(Palette.card).clipShape(Circle())
-                    .shadow(color: Color(hex: 0x583C1E).opacity(0.07), radius: 8, y: 2)
+                    
             }
             .accessibilityLabel("Exportar")
             // "+" pré-selecionando o status do filtro ativo (spec 8.4).
             Button { sheet = .adicionar } label: {
                 Image(systemName: "plus")
                     .font(.system(size: 20, weight: .semibold)).foregroundStyle(.white)
-                    .frame(width: 38, height: 38).background(Palette.coral).clipShape(Circle())
+                    .frame(width: 38, height: 38).background(Palette.accent).clipShape(Circle())
             }
             .accessibilityLabel("Registrar livro")
         }
@@ -169,7 +169,7 @@ struct BibliotecaView: View {
                         if filtro == .quero_ler, let indicado = livro.indicado_por, !indicado.isEmpty {
                             Text("Indicado por \(indicado)")
                                 .font(.system(size: 12, weight: .semibold))
-                                .foregroundStyle(Palette.lavender).lineLimit(1)
+                                .foregroundStyle(Palette.textSecondary).lineLimit(1)
                         }
                         // Estrelas quando avaliado; data quando lido.
                         HStack(spacing: 8) {
@@ -179,7 +179,7 @@ struct BibliotecaView: View {
                             if livro.status == .lido, let fim = livro.data_conclusao {
                                 Text(AppDate.curto(fim)).font(.system(size: 12)).foregroundStyle(Palette.textMuted)
                             } else if livro.status == .lendo {
-                                Text("Lendo agora").font(.system(size: 11, weight: .bold)).foregroundStyle(Palette.sky)
+                                Text("Lendo agora").font(.system(size: 11, weight: .bold)).foregroundStyle(Palette.accent)
                             }
                         }
                     }
@@ -193,9 +193,9 @@ struct BibliotecaView: View {
                 Button { comecarLeitura(livro) } label: {
                     Text("Comecei a ler")
                         .font(.system(size: 12, weight: .heavy))
-                        .foregroundStyle(Palette.sky)
+                        .foregroundStyle(Palette.accent)
                         .padding(.horizontal, 12).padding(.vertical, 8)
-                        .background(Palette.sky.opacity(0.14))
+                        .background(Palette.accent.opacity(0.12))
                         .clipShape(Capsule())
                 }
                 .buttonStyle(.plain)
@@ -220,7 +220,7 @@ struct BibliotecaView: View {
                     .font(.system(size: 16, weight: .heavy))
                     .foregroundStyle(.white)
                     .padding(.horizontal, 24).padding(.vertical, 14)
-                    .background(Palette.coral).clipShape(Capsule())
+                    .background(Palette.accent).clipShape(Capsule())
             }
         }
         .frame(maxWidth: .infinity)

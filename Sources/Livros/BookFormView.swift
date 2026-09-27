@@ -66,12 +66,12 @@ struct BookFormView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancelar") { dismiss() }.foregroundStyle(Palette.coral)
+                    Button("Cancelar") { dismiss() }.foregroundStyle(Palette.accent)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Salvar") { salvar() }
                         .fontWeight(.bold)
-                        .foregroundStyle(vm.podeSalvar ? Palette.coral : Palette.textMuted)
+                        .foregroundStyle(vm.podeSalvar ? Palette.accent : Palette.textMuted)
                         .disabled(!vm.podeSalvar)
                 }
             }
@@ -185,7 +185,7 @@ struct BookFormView: View {
                     let selecionado = vm.status == s
                     Text(s.displayName)
                         .font(.system(size: 13.5, weight: selecionado ? .heavy : .semibold))
-                        .foregroundStyle(selecionado ? .white : corStatus(s))
+                        .foregroundStyle(selecionado ? .white : Palette.textSecondary)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 9)
                         .background(selecionado ? corStatus(s) : Color.clear)
@@ -201,9 +201,8 @@ struct BookFormView: View {
 
     private func corStatus(_ s: status_livro) -> Color {
         switch s {
-        case .quero_ler: return Palette.lavender
-        case .lendo: return Palette.sky
-        case .lido: return Palette.mint
+        // Revisão 27/09/2026: status numa cor só (destaque azul), sem arco-íris.
+        case .quero_ler, .lendo, .lido: return Palette.accent
         }
     }
 
@@ -259,7 +258,7 @@ struct BookFormView: View {
         HStack(spacing: 12) {
             OptionalDateField(titulo: "Comecei", data: $vm.dataInicio, cor: Palette.textMuted)
             if vm.status == .lido {
-                OptionalDateField(titulo: "Terminei", data: $vm.dataConclusao, cor: Palette.mint)
+                OptionalDateField(titulo: "Terminei", data: $vm.dataConclusao, cor: Palette.accent)
             }
         }
     }
@@ -347,7 +346,7 @@ private struct OptionalDateField: View {
             } else {
                 Button("Definir") { data = Date() }
                     .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(Palette.coral)
+                    .foregroundStyle(Palette.accent)
             }
         }
         .padding(14)

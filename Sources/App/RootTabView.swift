@@ -96,9 +96,11 @@ struct RootTabView: View {
         return Button { aba = destino } label: {
             VStack(spacing: 3) {
                 Image(systemName: icone).font(.system(size: 18))
+                // Uma linha só: "Configurações" não cabe a 10pt na coluna e quebrava.
                 Text(titulo).font(.system(size: 10, weight: selecionado ? .heavy : .semibold))
+                    .lineLimit(1).minimumScaleFactor(0.7)
             }
-            .foregroundStyle(selecionado ? Palette.coral : Palette.textMuted)
+            .foregroundStyle(selecionado ? Palette.accent : Palette.textMuted)
             .frame(maxWidth: .infinity)
         }
         .buttonStyle(.plain)
@@ -112,9 +114,9 @@ struct RootTabView: View {
                 .font(.system(size: 30, weight: .light))
                 .foregroundStyle(.white)
                 .frame(width: 62, height: 62)
-                .background(Palette.coral)
+                .background(Palette.accent)
                 .clipShape(Circle())
-                .shadow(color: Palette.coral.opacity(0.45), radius: 12, y: 8)
+                .shadow(color: Palette.accent.opacity(0.45), radius: 12, y: 8)
         }
         .frame(maxHeight: .infinity, alignment: .bottom)
         .offset(y: -18)

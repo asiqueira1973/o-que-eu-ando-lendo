@@ -69,26 +69,29 @@ struct HomeView: View {
     }
 
     // Indicadores: só mês e ano correntes, para a Home ficar mais limpa (spec 8.8).
+    // Revisão 27/09/2026: blocos neutros iguais (cinza, número escuro) no lugar de
+    // um bloco coral e outro azul — uma cor de destaque só no app, padrão iOS.
     private var indicadores: some View {
         let i = vm.indicadores
         return HStack(spacing: 12) {
-            statPill(i.mes, "Este mês", bg: Palette.coral, fg: .white)
-            statPill(i.ano, "Este ano", bg: Palette.sky, fg: Palette.skyInk)
+            statPill(i.mes, "Este mês")
+            statPill(i.ano, "Este ano")
         }
     }
 
-    private func statPill(_ valor: Int, _ rotulo: String, bg: Color, fg: Color) -> some View {
+    private func statPill(_ valor: Int, _ rotulo: String) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("\(valor)")
                 .font(.system(size: 32, weight: .heavy))
+                .foregroundStyle(Palette.textPrimary)
             Text(rotulo)
-                .font(.system(size: 11, weight: .bold))
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(Palette.textSecondary)
         }
-        .foregroundStyle(fg)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 12)
         .padding(.vertical, 14)
-        .background(bg)
+        .background(Palette.tile)
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(valor) livros lidos — \(rotulo)")
@@ -107,7 +110,7 @@ struct HomeView: View {
                 Button(action: onVerTudoLendo) {
                     Text("Ver tudo")
                         .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(Palette.coral)
+                        .foregroundStyle(Palette.accent)
                 }
             }
         }
@@ -131,7 +134,7 @@ struct HomeView: View {
                             }
                             Text("Lendo agora")
                                 .font(.system(size: 11, weight: .bold))
-                                .foregroundStyle(Palette.sky)
+                                .foregroundStyle(Palette.accent)
                         }
                         Spacer()
                     }
@@ -155,7 +158,7 @@ struct HomeView: View {
                             FlexibleBookCover(livro: livro, height: 120, cornerRadius: 10)
                             Text("\(idx + 1)")
                                 .font(.system(size: 11, weight: .heavy))
-                                .foregroundStyle(Palette.mustard)
+                                .foregroundStyle(.white)
                                 .frame(width: 22, height: 22)
                                 .background(Palette.ink).clipShape(Circle())
                                 .padding(8)
@@ -207,7 +210,7 @@ struct HomeView: View {
                     .font(.system(size: 16, weight: .heavy))
                     .foregroundStyle(.white)
                     .padding(.horizontal, 24).padding(.vertical, 14)
-                    .background(Palette.coral)
+                    .background(Palette.accent)
                     .clipShape(Capsule())
             }
         }
@@ -252,7 +255,7 @@ struct FeedBookCard: View {
                     HStack(spacing: 6) {
                         Text("#\(posicaoAno)")
                             .font(.system(size: 11, weight: .heavy))
-                            .foregroundStyle(BookColor.color(for: livro.id))
+                            .foregroundStyle(BookColor.ink(for: livro.id))
                         Text("no ano").font(.system(size: 11)).foregroundStyle(Palette.textMuted)
                     }
                 }
